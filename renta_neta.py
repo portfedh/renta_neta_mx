@@ -1,26 +1,33 @@
-# Constantes
-deduccion_ciega = 0.35
-tasa_isr_pf = 0.35 # Tasa Mamxima
 
-# Obtener la renta del usuario
-renta_bruta = float(input("¿Cuál es la renta mensual?: "))
-tasa_isr_input = float(input("¿Cuál es la tasa de ISR? (Si no se conoce usar 0.35): "))
+class RentaNeta():
 
-# Calculos
-deduccion = renta_bruta * deduccion_ciega
-renta_gravable = renta_bruta - deduccion
-impuestos_por_pagar = renta_gravable * tasa_isr_input
-tasa_efectiva = impuestos_por_pagar/renta_bruta
-renta_neta = renta_bruta - impuestos_por_pagar
+    DEDUCCION_CIEGA = 0.35
+
+    def __init__(self):
+        self.get_inputs()
+        self.calculate_net_rent()
+        self.print_output()
+
+    def get_inputs(self):
+        self.renta_bruta = float(input("Monto de renta mensual: "))
+        self.tasa_isr = float(input("Tasa de impuestos PF: (0.0 - 0.35). Usar 0.35 si no la conoces. "))
+
+    def calculate_net_rent(self):
+        self.deduccion = self.renta_bruta * RentaNeta.DEDUCCION_CIEGA
+        self.renta_gravable = self.renta_bruta - self.deduccion
+        self.impuestos_por_pagar = self.renta_gravable * self.tasa_isr
+        self.renta_neta = self.renta_bruta - self.impuestos_por_pagar
+        self.tasa_efectiva = self.impuestos_por_pagar / self.renta_bruta
+
+    def print_output(self):
+        print("Renta Bruta: " + "$" + "{:,.2f}".format(self.renta_bruta))
+        print("Renta neta: " + "$" + "{:,.2f}".format(self.renta_neta))
+        print("Deduccion Ciega: " + "{:,.2f}".format(RentaNeta.DEDUCCION_CIEGA*100) + "%")
+        print("Deduccion Ciega: " + "$" + "{:,.2f}".format(self.deduccion))
+        print("Renta gravable: " + "$" + "{:,.2f}".format(self.renta_gravable))
+        print("Impuestos por pagar: " + "$"  + "{:,.2f}".format(self.impuestos_por_pagar))
+        print("Tasa efectiva: " + "{:,.2f}".format(self.tasa_efectiva*100) + "%")
 
 
-# Outputs
 if __name__ == "__main__":
-    print("Renta Bruta: " + "$" + "{:,.2f}".format(renta_bruta))
-    print("Renta neta: " + "$" + "{:,.2f}".format(renta_neta))
-    print("Deduccion Ciega: " + "{:,.2f}".format(deduccion_ciega*100) + "%")
-    print("Deduccion Ciega: " + "$" + "{:,.2f}".format(deduccion))
-    print("Renta Gravable: " + "$" + "{:,.2f}".format(renta_gravable))
-    print("Impuestos por pagar: " + "$"  + "{:,.2f}".format(impuestos_por_pagar))
-    print("Tasa efectiva: " + "{:,.2f}".format(tasa_efectiva*100) + "%")
-
+    oNetRent = RentaNeta()
