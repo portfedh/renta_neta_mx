@@ -34,6 +34,15 @@ class RentaNeta:
         return self.impuestos_por_pagar / self.renta_bruta
 
 
+def format_currency(value: float) -> str:
+    """Devuelve un monto con formato monetario legible."""
+    return f"${value:,.2f}"
+
+
+def format_percentage(value: float) -> str:
+    return f"{value * 100:,.2f}%"
+
+
 def get_float_input(mensaje: str, default: Optional[float] = None) -> float:
     """Función auxiliar para obtener entrada flotante con validación."""
     while True:
@@ -55,14 +64,26 @@ def main():
 
     calculadora = RentaNeta(renta_bruta, tasa_isr)
 
+    resultados = [
+        ("Renta Bruta", format_currency(calculadora.renta_bruta)),
+        ("Deducción Ciega", format_percentage(calculadora.DEDUCCION_CIEGA)),
+        ("Deducción Ciega ($)", format_currency(calculadora.deduccion)),
+        ("Renta Gravable", format_currency(calculadora.renta_gravable)),
+        ("Tasa ISR", format_percentage(calculadora.tasa_isr)),
+        ("Impuestos por pagar", format_currency(calculadora.impuestos_por_pagar)),
+        ("Renta Neta", format_currency(calculadora.renta_neta)),
+        ("Tasa Efectiva", format_percentage(calculadora.tasa_efectiva)),
+    ]
+
+    label_width = max(len(label) for label, _ in resultados) + 2
+    value_width = max(len(value) for _, value in resultados)
+    total_width = label_width + value_width
+
     print("\n--- Resultados ---")
-    print(f"Renta Bruta:         ${calculadora.renta_bruta:,.2f}")
-    print(f"Renta neta:          ${calculadora.renta_neta:,.2f}")
-    print(f"Deducción Ciega:     {calculadora.DEDUCCION_CIEGA * 100:,.2f}%")
-    print(f"Deducción Ciega($):  ${calculadora.deduccion:,.2f}")
-    print(f"Renta gravable:      ${calculadora.renta_gravable:,.2f}")
-    print(f"Impuestos por pagar: ${calculadora.impuestos_por_pagar:,.2f}")
-    print(f"Tasa efectiva:       {calculadora.tasa_efectiva * 100:,.2f}%")
+    print("-" * total_width)
+    for label, value in resultados:
+        print(f"{label:<{label_width}}{value:>{value_width}}")
+    print("-" * total_width)
 
 
 if __name__ == "__main__":
